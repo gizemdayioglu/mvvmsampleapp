@@ -12,11 +12,11 @@ struct Photos: Codable {
 }
 
 struct Photo: Codable {
-    let id: Int
+    let photoId: Int
     let name: String
     let description: String?
-    let created_at: Date
-    let image_url: String
-    let for_sale: Bool
+    let createdAt: Date
+    let imageUrl: String
+    let forSale: Bool
     let camera: String?
 }

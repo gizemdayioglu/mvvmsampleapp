@@ -111,18 +111,26 @@ class PhotoListViewModelTests: XCTestCase {
 
             let indexPath = IndexPath(row: 1, section: 0)
             let testPhoto = mockAPIService.completePhotos[indexPath.row]
-            let vm = viewModel.getCellViewModel(at: indexPath)
+            let viewModelVM = viewModel.getCellViewModel(at: indexPath)
 
-            XCTAssertEqual( vm.titleText, testPhoto.name)
+            XCTAssertEqual( viewModelVM.titleText, testPhoto.name)
 
         }
 
         func test_cell_view_model() {
             let today = Date()
-            let photo = Photo(id: 1, name: "Name", description: "desc", created_at: today, image_url: "url", for_sale: true, camera: "camera")
-            let photoWithoutCarmera = Photo(id: 1, name: "Name", description: "desc", created_at: Date(), image_url: "url", for_sale: true, camera: nil)
-            let photoWithoutDesc = Photo(id: 1, name: "Name", description: nil, created_at: Date(), image_url: "url", for_sale: true, camera: "camera")
-            let photoWithouCameraAndDesc = Photo(id: 1, name: "Name", description: nil, created_at: Date(), image_url: "url", for_sale: true, camera: nil)
+            let photo = Photo(photoId: 1, name: "Name",
+                description: "desc", createdAt: today, imageUrl: "url",
+                forSale: true, camera: "camera")
+            let photoWithoutCarmera = Photo(photoId: 1, name: "Name",
+                description: "desc", createdAt: Date(), imageUrl: "url",
+                forSale: true, camera: nil)
+            let photoWithoutDesc = Photo(photoId: 1, name: "Name",
+                description: nil, createdAt: Date(), imageUrl: "url",
+                forSale: true, camera: "camera")
+            let photoWithouCameraAndDesc = Photo(photoId: 1,
+                name: "Name", description: nil, createdAt: Date(),
+                imageUrl: "url", forSale: true, camera: nil)
 
             let cellViewModel = viewModel!.createCellViewModel( photo: photo )
             let cellViewModelWithoutCamera = viewModel!.createCellViewModel( photo: photoWithoutCarmera )
@@ -130,7 +138,7 @@ class PhotoListViewModelTests: XCTestCase {
             let cellViewModelWithoutCameraAndDesc = viewModel!.createCellViewModel( photo: photoWithouCameraAndDesc )
 
             XCTAssertEqual( photo.name, cellViewModel.titleText )
-            XCTAssertEqual( photo.image_url, cellViewModel.imageUrl )
+            XCTAssertEqual( photo.imageUrl, cellViewModel.imageUrl )
             XCTAssertEqual(cellViewModel.descText, "\(photo.camera!) - \(photo.description!)" )
             XCTAssertEqual(cellViewModelWithoutDesc.descText, photoWithoutDesc.camera! )
             XCTAssertEqual(cellViewModelWithoutCamera.descText, photoWithoutCarmera.description! )
@@ -144,9 +152,6 @@ class PhotoListViewModelTests: XCTestCase {
 
         }
     }
-
-    //MARK: State control
-
     extension PhotoListViewModelTests {
         private func goToFetchPhotoFinished() {
             mockAPIService.completePhotos = StubGenerator().stubPhotos()
@@ -163,9 +168,9 @@ class PhotoListViewModelTests: XCTestCase {
 
         var isFetchPopularPhotoCalled = false
         var completePhotos: [Photo] = [Photo]()
-        var completeClosure: ((Bool, [Photo], APIError?) -> ())!
+        var completeClosure: ((Bool, [Photo], APIError?) -> Void)!
 
-        func fetchPopularPhoto(complete: @escaping (Bool, [Photo], APIError?) -> ()) {
+        func fetchPopularPhoto(complete: @escaping (Bool, [Photo], APIError?) -> Void) {
             isFetchPopularPhotoCalled = true
             completeClosure = complete
         }

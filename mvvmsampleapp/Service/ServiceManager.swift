@@ -16,19 +16,23 @@ enum APIError: String, Error {
 
 protocol ServiceManagerProtocol {
     func fetchPopularPhoto( complete: @escaping ( _ success: Bool, _ photos: [Photo],
-        _ error: APIError? )->() )
+        _ error: APIError? ) -> Void )
 }
 
 class ServiceManager: ServiceManagerProtocol {
     func fetchPopularPhoto( complete: @escaping ( _ success: Bool, _ photos: [Photo],
-        _ error: APIError? )->() ) {
+        _ error: APIError? ) -> Void ) {
         DispatchQueue.global().async {
             let path = Bundle.main.path(forResource: "content", ofType: "json")!
-            let data = try! Data(contentsOf: URL(fileURLWithPath: path))
-            let decoder = JSONDecoder()
-            decoder.dateDecodingStrategy = .iso8601
-            let photos = try! decoder.decode(Photos.self, from: data)
-            complete( true, photos.photos, nil )
+            do {
+                let data = try Data(contentsOf: URL(fileURLWithPath: path))
+                let decoder = JSONDecoder()
+                decoder.dateDecodingStrategy = .iso8601
+                let photos = try decoder.decode(Photos.self, from: data)
+                complete( true, photos.photos, nil )
+            } catch {
+                print("Error")
+            }
         }
     }
 }

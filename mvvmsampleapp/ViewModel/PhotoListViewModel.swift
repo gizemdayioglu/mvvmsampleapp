@@ -38,9 +38,9 @@ class PhotoListViewModel {
     var isAllowSegue: Bool = false
     var selectedPhoto: Photo?
 
-    var reloadTableViewClosure: (()->())?
-    var showAlertClosure: (()->())?
-    var updateLoadingStatus: (()->())?
+    var reloadTableViewClosure: (() -> Void)?
+    var showAlertClosure: (() -> Void)?
+    var updateLoadingStatus: (() -> Void)?
 
     init( apiService: ServiceManagerProtocol = ServiceManager()) {
         self.apiService = apiService
@@ -52,7 +52,7 @@ class PhotoListViewModel {
             self?.isLoading = false
             if let error = error {
                 self?.alertMessage = error.rawValue
-            } else {
+            } else if success {
                 self?.processFetchedPhoto(photos: photos)
             }
         }
@@ -80,8 +80,8 @@ class PhotoListViewModel {
 
         return PhotoListCellViewModel( titleText: photo.name,
                                        descText: desc,
-                                       imageUrl: photo.image_url,
-                                       dateText: dateFormatter.string(from: photo.created_at) )
+                                       imageUrl: photo.imageUrl,
+                                       dateText: dateFormatter.string(from: photo.createdAt) )
     }
 
     private func processFetchedPhoto( photos: [Photo] ) {
@@ -96,12 +96,12 @@ class PhotoListViewModel {
 }
 
 extension PhotoListViewModel {
-    func userPressed( at indexPath: IndexPath ){
+    func userPressed( at indexPath: IndexPath ) {
         let photo = self.photos[indexPath.row]
-        if photo.for_sale {
+        if photo.forSale {
             self.isAllowSegue = true
             self.selectedPhoto = photo
-        }else {
+        } else {
             self.isAllowSegue = false
             self.selectedPhoto = nil
             self.alertMessage = self.showAlertMessage(photo: photo)

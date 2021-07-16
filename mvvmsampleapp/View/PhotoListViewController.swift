@@ -48,7 +48,7 @@ class PhotoListViewController: UIViewController {
                     UIView.animate(withDuration: 0.2, animations: {
                         self?.tableView.alpha = 0.0
                     })
-                }else {
+                } else {
                     self?.activityIndicator.stopAnimating()
                     UIView.animate(withDuration: 0.2, animations: {
                         self?.tableView.alpha = 1.0
@@ -82,7 +82,8 @@ class PhotoListViewController: UIViewController {
 extension PhotoListViewController: UITableViewDelegate, UITableViewDataSource {
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: "photoCellIdentifier", for: indexPath) as? PhotoListTableViewCell else {
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: "photoCellIdentifier", for: indexPath)
+            as? PhotoListTableViewCell else {
             fatalError("Cell not exists in storyboard")
         }
 
@@ -113,7 +114,7 @@ extension PhotoListViewController: UITableViewDelegate, UITableViewDataSource {
         self.viewModel.userPressed(at: indexPath)
         if viewModel.isAllowSegue {
             return indexPath
-        }else {
+        } else {
             return nil
         }
     }
@@ -122,9 +123,9 @@ extension PhotoListViewController: UITableViewDelegate, UITableViewDataSource {
 
 extension PhotoListViewController {
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if let vc = segue.destination as? PhotoDetailViewController,
+        if let viewContrl = segue.destination as? PhotoDetailViewController,
             let photo = viewModel.selectedPhoto {
-            vc.imageUrl = photo.image_url
+            viewContrl.imageUrl = photo.imageUrl
         }
     }
 }

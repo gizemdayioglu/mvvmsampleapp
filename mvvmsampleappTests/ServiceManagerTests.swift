@@ -33,7 +33,7 @@ class ServiceManagerTests: XCTestCase {
             XCTAssertEqual( photos.count, 20)
 
             for photo in photos {
-                XCTAssertNotNil(photo.id)
+                XCTAssertNotNil(photo.photoId)
             }
 
         })
